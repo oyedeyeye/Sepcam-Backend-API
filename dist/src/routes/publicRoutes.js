@@ -1,0 +1,15 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+const express_1 = require("express");
+const resources_1 = require("../controllers/public/resources");
+const search_1 = require("../controllers/public/search");
+const recentMsg_1 = require("../controllers/public/recentMsg");
+const readMsg_1 = require("../controllers/public/readMsg");
+const churchEvents_1 = require("../controllers/public/churchEvents");
+const router = (0, express_1.Router)();
+router.get('/resources', resources_1.getResources);
+router.get('/search', search_1.searchMessages);
+router.get('/recent', recentMsg_1.getRecentMessage);
+router.get('/resource/:id', readMsg_1.readMessage);
+router.get('/events', churchEvents_1.getChurchEvents);
+exports.default = router;
