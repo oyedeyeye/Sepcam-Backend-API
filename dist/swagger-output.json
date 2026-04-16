@@ -7,8 +7,8 @@
     },
     "servers": [
         {
-            "url": "localhost:5000",
-            "description": "Current Environment or Production Server"
+            "url": "/",
+            "description": "Documentation Server"
         }
     ],
     "paths": {
