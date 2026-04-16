@@ -55,6 +55,18 @@ To launch natively into your development environment safely equipped with hot-re
 npm run dev
 ```
 
+## 📖 API Documentation (Swagger)
+
+This project uses `swagger-autogen` and `swagger-ui-express` to automatically generate and host interactive API documentation directly from the Express endpoints.
+
+To generate or update the Swagger definition file (`src/swagger-output.json`), run:
+```bash
+npm run swagger
+```
+
+When the application is running successfully (e.g., via `npm run dev`), you can view and test the interactive API documentation at:
+👉 **[http://localhost:5000/api-docs](http://localhost:5000/api-docs)** *(Ensure the port matches your `.env` configuration).*
+
 ## 🌐 API Overview
 
 | Method | Endpoint | Description | Protected |
