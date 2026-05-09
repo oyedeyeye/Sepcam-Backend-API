@@ -32,3 +32,16 @@ export const uploadBlobToContainer = async (
     throw new Error(`Failed to upload blob ${blobName}: ${error.message}`);
   }
 };
+
+export const deleteBlobFromContainer = async (
+  containerClient: ContainerClient,
+  blobName: string
+): Promise<void> => {
+  try {
+    const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+    await blockBlobClient.deleteIfExists();
+  } catch (error: any) {
+    console.error(`Failed to delete blob ${blobName}: ${error.message}`);
+    // We typically don't want to throw an error for deletion failures to avoid breaking the main operation
+  }
+};

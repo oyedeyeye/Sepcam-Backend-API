@@ -11,14 +11,43 @@ const doc = {
   // In OpenAPI 3, 'host' and 'schemes' are replaced by 'servers'.
   servers: [
     {
-      url: "/", // process.env.API_BASE_URL || `http://localhost:${process.env.PORT || 5000}`,
-      description: 'Documentation Server'
+      url: process.env.API_BASE_URL || `http://localhost:${process.env.PORT || 5000}`,
+      description: 'Current Environment'
     },
-    // {
-    //   url: 'https://api.sepcam.com', // Replace with your actual production domain
-    //   description: 'Production Server'
-    // }
+    {
+      url: 'https://api.sepcam.com', // Replace with your actual production domain
+      description: 'Production Server'
+    },
+    {
+      url: '/',
+      description: 'Relative Path (Auto-resolves to current host)'
+    }
   ],
+  tags: [
+    { name: 'Public API', description: 'Endpoints accessible without authentication' },
+    { name: 'Authentication', description: 'User login and token generation' },
+    { name: 'Admin Messages', description: 'Secured endpoints for managing Sepcam messages and media' },
+    { name: 'Admin Events', description: 'Secured endpoints for managing Church events' },
+    { name: 'Admin Users', description: 'Secured endpoints for managing administrative users' }
+  ],
+  components: {
+    securitySchemes: {
+      bearerAuth: {
+        type: 'http',
+        scheme: 'bearer',
+        bearerFormat: 'JWT'
+      }
+    },
+    schemas: {
+      ErrorResponse: {
+        message: 'Error message description',
+        error: 'Detailed error trace (optional)'
+      },
+      SuccessResponse: {
+        message: 'Action completed successfully'
+      }
+    }
+  }
 };
 
 const outputFile = './swagger-output.json'; // Outputs to src/swagger-output.json (relative to where it runs or we should put it inside src)

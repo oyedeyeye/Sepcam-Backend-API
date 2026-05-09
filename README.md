@@ -72,15 +72,22 @@ When the application is running successfully (e.g., via `npm run dev`), you can 
 | Method | Endpoint | Description | Protected |
 |--------|----------|-------------|-----------|
 | `GET`  | `/`               | Health Check Validation            | No  |
-| `GET`  | `/recentMsg`      | Fetches the most recent message    | No  |
-| `GET`  | `/search?keyword=`| Lookups matching `title` or `theme`| No  |
+| `GET`  | `/recent`         | Fetches the most recent message    | No  |
+| `GET`  | `/search`         | Lookups matching `title` or `theme`| No  |
 | `GET`  | `/resources`      | Paginated API loading message logs | No  |
-| `GET`  | `/readMsg/:id`    | Full read of a single message      | No  |
-| `GET`  | `/churchEvents`   | List upcoming and past events      | No  |
+| `GET`  | `/resource/:id`   | Full read of a single message      | No  |
+| `GET`  | `/events`         | List upcoming and past events      | No  |
 | `POST` | `/user/login`     | Receive natively signed Auth token | No  |
 | `POST` | `/admin/upload`   | Upload Message payload/Azure Blobs | Yes |
-| `PUT`  | `/admin/edit/:id` | Update standard Message string data| Yes |
-| `DELETE`| `/admin/delete/:id`| Remove Message UUID rows         | Yes |
+| `PUT`  | `/admin/update/:id`| Update Message (supports image/audio/pdf files)| Yes |
+| `DELETE`| `/admin/delete/:id`| Remove Message and associated Azure Blobs      | Yes |
+| `POST` | `/admin/events`   | Create new Church Event with thumbnail         | Yes |
+| `PUT`  | `/admin/events/:id`| Update Church Event and replace thumbnail      | Yes |
+| `DELETE`| `/admin/events/:id`| Delete Church Event and associated thumbnail   | Yes |
+| `POST` | `/admin/users`    | Create new Admin User (`bcrypt` secured)       | Yes |
+| `GET`  | `/admin/users`    | List all Admin Users (excludes passwords)      | Yes |
+| `PUT`  | `/admin/users/:id`| Update Admin User details/password             | Yes |
+| `DELETE`| `/admin/users/:id`| Delete Admin User                              | Yes |
 
 *Note: Admin routes are guarded gracefully by the `/middlewares/auth.ts` enforcing strict JWT verification.*
 

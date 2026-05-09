@@ -5,6 +5,7 @@ import adminRoutes from './routes/adminRoutes';
 import userRoutes from './routes/userRoutes';
 import swaggerUi from 'swagger-ui-express';
 import swaggerDocument from './swagger-output.json';
+import { globalErrorHandler } from './middlewares/errorHandler';
 
 const app = express();
 
@@ -22,5 +23,8 @@ app.use('/', publicRoutes);
 app.use('/admin', adminRoutes);
 app.use('/user', userRoutes);
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+
+// Global Error Handler should be mounted last
+app.use(globalErrorHandler as any);
 
 export default app;
