@@ -10,8 +10,8 @@ model Message {
   id                String   @id @default(uuid())
   title             String
   theme             String?
-  caption           String?
-  description       String?
+  caption           String? @db.Text
+  description       String? @db.LongText
   serviceTag        String?
   youtubeLink       String?
   preacher          String?

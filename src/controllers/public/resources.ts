@@ -1,6 +1,8 @@
 import { Request, Response } from 'express';
 import { prisma } from '../../lib/prisma';
+import NodeCache from 'node-cache';
 
+const myCache = new NodeCache({ stdTTL: 300 }); // Cache for 5 minutes
 
 export const getResources = async (req: Request, res: Response): Promise<void> => {
   /* #swagger.tags = ['Public API']
@@ -29,6 +31,14 @@ export const getResources = async (req: Request, res: Response): Promise<void> =
     const limit = parseInt(req.query.limit as string) || 10;
     const skip = (page - 1) * limit;
 
+    const cacheKey = `resources_page_${page}_limit_${limit}`;
+    const cachedResponse = myCache.get(cacheKey);
+    
+    if (cachedResponse) {
+      res.status(200).json(cachedResponse);
+      return;
+    }
+
     const [messages, total] = await Promise.all([
       prisma.message.findMany({
         skip,
@@ -38,14 +48,37 @@ export const getResources = async (req: Request, res: Response): Promise<void> =
       prisma.message.count()
     ]);
 
-    res.status(200).json({ 
-      data: messages,
+    const accountMatch = (process.env.AZURE_STORAGE_CONNECTION_STRING || '').match(/AccountName=([^;]+)/);
+    const accountName = accountMatch ? accountMatch[1] : 'sepcamwebadmin001';
+    
+    const audioContainer = process.env.AZURE_AUDIO_CONTAINER || 'audios';
+    const pdfContainer = process.env.AZURE_PDF_CONTAINER || 'pdfs';
+    const imageContainer = process.env.AZURE_IMAGE_CONTAINER || 'images';
+
+    const messagesWithLinks = messages.map((message) => {
+      const audioFileLink = message.audioFile ? `https://${accountName}.blob.core.windows.net/${audioContainer}/${message.audioFile}` : '';
+      const pdfFileLink = message.pdfFile ? `https://${accountName}.blob.core.windows.net/${pdfContainer}/${message.pdfFile}` : '';
+      const messageThumbnailLink = message.messageThumbnail ? `https://${accountName}.blob.core.windows.net/${imageContainer}/${message.messageThumbnail}` : '';
+      return {
+        ...message,
+        audioFileLink,
+        pdfFileLink,
+        messageThumbnailLink
+      };
+    });
+
+    const responsePayload = {
+      data: messagesWithLinks,
       meta: {
         total,
         page,
         limit
       }
-    });
+    };
+
+    myCache.set(cacheKey, responsePayload);
+
+    res.status(200).json(responsePayload);
   } catch (error: any) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }

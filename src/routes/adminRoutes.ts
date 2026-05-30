@@ -11,12 +11,15 @@ import { getUsers } from '../controllers/admin/users/getUsers';
 import { updateUser } from '../controllers/admin/users/updateUser';
 import { deleteUser } from '../controllers/admin/users/deleteUser';
 import { authenticateRequest } from '../middlewares/auth';
+import { getDashboardData } from '../controllers/admin/dashboard';
 
 const router = Router();
 const upload = multer({ dest: '/tmp/uploads/' });
 
 // Base protection against unauthenticated access
 router.use(authenticateRequest);
+
+router.get('/dashboard', getDashboardData);
 
 router.post('/upload', upload.fields([
   { name: 'messageThumbnail', maxCount: 1 },

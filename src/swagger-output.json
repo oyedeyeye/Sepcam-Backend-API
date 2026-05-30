@@ -685,6 +685,217 @@
         }
       }
     },
+    "/upcoming-events": {
+      "get": {
+        "tags": [
+          "Public API"
+        ],
+        "summary": "Fetch upcoming Google Calendar events",
+        "description": "Returns a list of the next 3 upcoming church events directly from Google Calendar API.",
+        "responses": {
+          "200": {
+            "description": "List of Google Calendar events",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "event-id"
+                      },
+                      "summary": {
+                        "type": "string",
+                        "example": "Event Summary / Title"
+                      },
+                      "description": {
+                        "type": "string",
+                        "example": "Event Description"
+                      },
+                      "htmlLink": {
+                        "type": "string",
+                        "example": "https://calendar.google.com/..."
+                      },
+                      "start": {
+                        "type": "object",
+                        "properties": {
+                          "dateTime": {
+                            "type": "string",
+                            "example": "2026-10-10T10:00:00Z"
+                          }
+                        }
+                      },
+                      "end": {
+                        "type": "object",
+                        "properties": {
+                          "dateTime": {
+                            "type": "string",
+                            "example": "2026-10-10T12:00:00Z"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": {
+                        "type": "string",
+                        "example": "event-id"
+                      },
+                      "summary": {
+                        "type": "string",
+                        "example": "Event Summary / Title"
+                      },
+                      "description": {
+                        "type": "string",
+                        "example": "Event Description"
+                      },
+                      "htmlLink": {
+                        "type": "string",
+                        "example": "https://calendar.google.com/..."
+                      },
+                      "start": {
+                        "type": "object",
+                        "properties": {
+                          "dateTime": {
+                            "type": "string",
+                            "example": "2026-10-10T10:00:00Z"
+                          }
+                        }
+                      },
+                      "end": {
+                        "type": "object",
+                        "properties": {
+                          "dateTime": {
+                            "type": "string",
+                            "example": "2026-10-10T12:00:00Z"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        }
+      }
+    },
+    "/admin/dashboard": {
+      "get": {
+        "tags": [
+          "Admin Dashboard"
+        ],
+        "summary": "Fetch backwards-compatible dashboard content listing",
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "Successfully fetched dashboard content",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entities": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "rowKey": {
+                            "type": "string",
+                            "example": "uuid"
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "Message Title"
+                          },
+                          "theme": {
+                            "type": "string",
+                            "example": "Theme"
+                          },
+                          "date": {
+                            "type": "string",
+                            "example": "2026-05-09T00:00:00.000Z"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              },
+              "application/xml": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "entities": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "rowKey": {
+                            "type": "string",
+                            "example": "uuid"
+                          },
+                          "title": {
+                            "type": "string",
+                            "example": "Message Title"
+                          },
+                          "theme": {
+                            "type": "string",
+                            "example": "Theme"
+                          },
+                          "date": {
+                            "type": "string",
+                            "example": "2026-05-09T00:00:00.000Z"
+                          }
+                        }
+                      }
+                    }
+                  },
+                  "xml": {
+                    "name": "main"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
+          },
+          "500": {
+            "description": "Server Error"
+          }
+        },
+        "security": [
+          {
+            "bearerAuth": []
+          }
+        ]
+      }
+    },
     "/admin/upload": {
       "post": {
         "tags": [

@@ -35,7 +35,25 @@ export const readMessage = async (req: Request, res: Response): Promise<void> =>
       return;
     }
 
-    res.status(200).json({ data: message });
+    const accountMatch = (process.env.AZURE_STORAGE_CONNECTION_STRING || '').match(/AccountName=([^;]+)/);
+    const accountName = accountMatch ? accountMatch[1] : 'sepcamwebadmin001';
+    
+    const audioContainer = process.env.AZURE_AUDIO_CONTAINER || 'audios';
+    const pdfContainer = process.env.AZURE_PDF_CONTAINER || 'pdfs';
+    const imageContainer = process.env.AZURE_IMAGE_CONTAINER || 'images';
+
+    const audioFileLink = message.audioFile ? `https://${accountName}.blob.core.windows.net/${audioContainer}/${message.audioFile}` : '';
+    const pdfFileLink = message.pdfFile ? `https://${accountName}.blob.core.windows.net/${pdfContainer}/${message.pdfFile}` : '';
+    const messageThumbnailLink = message.messageThumbnail ? `https://${accountName}.blob.core.windows.net/${imageContainer}/${message.messageThumbnail}` : '';
+
+    const messageWithLinks = {
+      ...message,
+      audioFileLink,
+      pdfFileLink,
+      messageThumbnailLink
+    };
+
+    res.status(200).json({ data: messageWithLinks });
   } catch (error: any) {
     res.status(500).json({ message: 'Server error', error: error.message });
   }
