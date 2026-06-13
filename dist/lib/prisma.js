@@ -10,7 +10,7 @@ const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
 let adapter;
 if (process.env.NODE_ENV !== 'test') {
-    const connectionString = process.env.DATABASE_URL || "mysql://root:password@localhost:3306/sepcam_db";
+    const connectionString = process.env.DATABASE_URL || "mysql://sepcam_user:sepcam_pass@localhost:3306/sepcam_db";
     adapter = new adapter_mariadb_1.PrismaMariaDb(connectionString);
 }
 exports.prisma = new client_1.PrismaClient(adapter ? { adapter } : undefined);

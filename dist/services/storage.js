@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.uploadBlobToContainer = exports.imageClient = exports.audioClient = exports.pdfClient = exports.getContainerClient = void 0;
+exports.deleteBlobFromContainer = exports.uploadBlobToContainer = exports.imageClient = exports.audioClient = exports.pdfClient = exports.getContainerClient = void 0;
 const storage_blob_1 = require("@azure/storage-blob");
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
@@ -35,3 +35,14 @@ const uploadBlobToContainer = async (containerClient, filePath, blobName) => {
     }
 };
 exports.uploadBlobToContainer = uploadBlobToContainer;
+const deleteBlobFromContainer = async (containerClient, blobName) => {
+    try {
+        const blockBlobClient = containerClient.getBlockBlobClient(blobName);
+        await blockBlobClient.deleteIfExists();
+    }
+    catch (error) {
+        console.error(`Failed to delete blob ${blobName}: ${error.message}`);
+        // We typically don't want to throw an error for deletion failures to avoid breaking the main operation
+    }
+};
+exports.deleteBlobFromContainer = deleteBlobFromContainer;

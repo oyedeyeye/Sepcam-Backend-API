@@ -7,8 +7,38 @@
     },
     "servers": [
         {
+            "url": "http://localhost:5000",
+            "description": "Current Environment"
+        },
+        {
+            "url": "https://api.sepcam.com",
+            "description": "Production Server"
+        },
+        {
             "url": "/",
-            "description": "Documentation Server"
+            "description": "Relative Path (Auto-resolves to current host)"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Public API",
+            "description": "Endpoints accessible without authentication"
+        },
+        {
+            "name": "Authentication",
+            "description": "User login and token generation"
+        },
+        {
+            "name": "Admin Messages",
+            "description": "Secured endpoints for managing Sepcam messages and media"
+        },
+        {
+            "name": "Admin Events",
+            "description": "Secured endpoints for managing Church events"
+        },
+        {
+            "name": "Admin Users",
+            "description": "Secured endpoints for managing administrative users"
         }
     ],
     "paths": {
@@ -24,39 +54,178 @@
         },
         "/resources": {
             "get": {
+                "tags": [
+                    "Public API"
+                ],
+                "summary": "Fetch paginated messages",
                 "description": "",
                 "parameters": [
                     {
                         "name": "page",
+                        "description": "Page number (default: 1)",
                         "in": "query",
                         "schema": {
-                            "type": "string"
+                            "type": "integer"
                         }
                     },
                     {
                         "name": "limit",
+                        "description": "Items per page (default: 10)",
                         "in": "query",
                         "schema": {
-                            "type": "string"
+                            "type": "integer"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "Successfully fetched paginated messages",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "uuid"
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Message Title"
+                                                    },
+                                                    "messageThumbnail": {
+                                                        "type": "string",
+                                                        "example": "https://sepcam.blob.core.windows.net/...jpg"
+                                                    },
+                                                    "audioFile": {
+                                                        "type": "string",
+                                                        "example": "https://sepcam.blob.core.windows.net/...mp3"
+                                                    },
+                                                    "pdfFile": {
+                                                        "type": "string",
+                                                        "example": "https://sepcam.blob.core.windows.net/...pdf"
+                                                    },
+                                                    "createdAt": {
+                                                        "type": "string",
+                                                        "example": "2026-05-09T00:00:00.000Z"
+                                                    },
+                                                    "updatedAt": {
+                                                        "type": "string",
+                                                        "example": "2026-05-09T00:00:00.000Z"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "meta": {
+                                            "type": "object",
+                                            "properties": {
+                                                "total": {
+                                                    "type": "number",
+                                                    "example": 100
+                                                },
+                                                "page": {
+                                                    "type": "number",
+                                                    "example": 1
+                                                },
+                                                "limit": {
+                                                    "type": "number",
+                                                    "example": 10
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "uuid"
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Message Title"
+                                                    },
+                                                    "messageThumbnail": {
+                                                        "type": "string",
+                                                        "example": "https://sepcam.blob.core.windows.net/...jpg"
+                                                    },
+                                                    "audioFile": {
+                                                        "type": "string",
+                                                        "example": "https://sepcam.blob.core.windows.net/...mp3"
+                                                    },
+                                                    "pdfFile": {
+                                                        "type": "string",
+                                                        "example": "https://sepcam.blob.core.windows.net/...pdf"
+                                                    },
+                                                    "createdAt": {
+                                                        "type": "string",
+                                                        "example": "2026-05-09T00:00:00.000Z"
+                                                    },
+                                                    "updatedAt": {
+                                                        "type": "string",
+                                                        "example": "2026-05-09T00:00:00.000Z"
+                                                    }
+                                                }
+                                            }
+                                        },
+                                        "meta": {
+                                            "type": "object",
+                                            "properties": {
+                                                "total": {
+                                                    "type": "number",
+                                                    "example": 100
+                                                },
+                                                "page": {
+                                                    "type": "number",
+                                                    "example": 1
+                                                },
+                                                "limit": {
+                                                    "type": "number",
+                                                    "example": 10
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            }
+                        }
                     },
                     "500": {
-                        "description": "Internal Server Error"
+                        "description": "Server Error"
                     }
                 }
             }
         },
         "/search": {
             "get": {
+                "tags": [
+                    "Public API"
+                ],
+                "summary": "Search messages by keyword",
                 "description": "",
                 "parameters": [
                     {
                         "name": "keyword",
+                        "description": "Search term for title or theme",
                         "in": "query",
                         "schema": {
                             "type": "string"
@@ -65,35 +234,225 @@
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "Search results",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "uuid"
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Message Title"
+                                                    },
+                                                    "messageThumbnail": {
+                                                        "type": "string",
+                                                        "example": "https://sepcam.blob.core.windows.net/...jpg"
+                                                    },
+                                                    "audioFile": {
+                                                        "type": "string",
+                                                        "example": "https://sepcam.blob.core.windows.net/...mp3"
+                                                    },
+                                                    "pdfFile": {
+                                                        "type": "string",
+                                                        "example": "https://sepcam.blob.core.windows.net/...pdf"
+                                                    },
+                                                    "createdAt": {
+                                                        "type": "string",
+                                                        "example": "2026-05-09T00:00:00.000Z"
+                                                    },
+                                                    "updatedAt": {
+                                                        "type": "string",
+                                                        "example": "2026-05-09T00:00:00.000Z"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "uuid"
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Message Title"
+                                                    },
+                                                    "messageThumbnail": {
+                                                        "type": "string",
+                                                        "example": "https://sepcam.blob.core.windows.net/...jpg"
+                                                    },
+                                                    "audioFile": {
+                                                        "type": "string",
+                                                        "example": "https://sepcam.blob.core.windows.net/...mp3"
+                                                    },
+                                                    "pdfFile": {
+                                                        "type": "string",
+                                                        "example": "https://sepcam.blob.core.windows.net/...pdf"
+                                                    },
+                                                    "createdAt": {
+                                                        "type": "string",
+                                                        "example": "2026-05-09T00:00:00.000Z"
+                                                    },
+                                                    "updatedAt": {
+                                                        "type": "string",
+                                                        "example": "2026-05-09T00:00:00.000Z"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            }
+                        }
                     },
                     "400": {
-                        "description": "Bad Request"
+                        "description": "Keyword is required"
                     },
                     "500": {
-                        "description": "Internal Server Error"
+                        "description": "Server Error"
                     }
                 }
             }
         },
         "/recent": {
             "get": {
+                "tags": [
+                    "Public API"
+                ],
+                "summary": "Fetch the most recent message",
                 "description": "",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "Most recent message",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "uuid"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Message Title"
+                                                },
+                                                "messageThumbnail": {
+                                                    "type": "string",
+                                                    "example": "https://sepcam.blob.core.windows.net/...jpg"
+                                                },
+                                                "audioFile": {
+                                                    "type": "string",
+                                                    "example": "https://sepcam.blob.core.windows.net/...mp3"
+                                                },
+                                                "pdfFile": {
+                                                    "type": "string",
+                                                    "example": "https://sepcam.blob.core.windows.net/...pdf"
+                                                },
+                                                "createdAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                },
+                                                "updatedAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "uuid"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Message Title"
+                                                },
+                                                "messageThumbnail": {
+                                                    "type": "string",
+                                                    "example": "https://sepcam.blob.core.windows.net/...jpg"
+                                                },
+                                                "audioFile": {
+                                                    "type": "string",
+                                                    "example": "https://sepcam.blob.core.windows.net/...mp3"
+                                                },
+                                                "pdfFile": {
+                                                    "type": "string",
+                                                    "example": "https://sepcam.blob.core.windows.net/...pdf"
+                                                },
+                                                "createdAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                },
+                                                "updatedAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Not Found"
+                        "description": "No messages found"
                     },
                     "500": {
-                        "description": "Internal Server Error"
+                        "description": "Server Error"
                     }
                 }
             }
         },
         "/resource/{id}": {
             "get": {
+                "tags": [
+                    "Public API"
+                ],
+                "summary": "Fetch a specific message by ID",
                 "description": "",
                 "parameters": [
                     {
@@ -102,72 +461,1747 @@
                         "required": true,
                         "schema": {
                             "type": "string"
-                        }
+                        },
+                        "description": "Message ID"
                     }
                 ],
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "Message details",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "uuid"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Message Title"
+                                                },
+                                                "messageThumbnail": {
+                                                    "type": "string",
+                                                    "example": "https://sepcam.blob.core.windows.net/...jpg"
+                                                },
+                                                "audioFile": {
+                                                    "type": "string",
+                                                    "example": "https://sepcam.blob.core.windows.net/...mp3"
+                                                },
+                                                "pdfFile": {
+                                                    "type": "string",
+                                                    "example": "https://sepcam.blob.core.windows.net/...pdf"
+                                                },
+                                                "createdAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                },
+                                                "updatedAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "uuid"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Message Title"
+                                                },
+                                                "messageThumbnail": {
+                                                    "type": "string",
+                                                    "example": "https://sepcam.blob.core.windows.net/...jpg"
+                                                },
+                                                "audioFile": {
+                                                    "type": "string",
+                                                    "example": "https://sepcam.blob.core.windows.net/...mp3"
+                                                },
+                                                "pdfFile": {
+                                                    "type": "string",
+                                                    "example": "https://sepcam.blob.core.windows.net/...pdf"
+                                                },
+                                                "createdAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                },
+                                                "updatedAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            }
+                        }
                     },
                     "404": {
-                        "description": "Not Found"
+                        "description": "Message not found"
                     },
                     "500": {
-                        "description": "Internal Server Error"
+                        "description": "Server Error"
                     }
                 }
             }
         },
         "/events": {
             "get": {
-                "description": "",
+                "tags": [
+                    "Public API"
+                ],
+                "summary": "Fetch all church events",
+                "description": "Returns a list of all upcoming and past church events, sorted by date.",
                 "responses": {
                     "200": {
-                        "description": "OK"
+                        "description": "List of events",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "uuid"
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Event Title"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Event Description"
+                                                    },
+                                                    "date": {
+                                                        "type": "string",
+                                                        "example": "2026-10-10T00:00:00.000Z"
+                                                    },
+                                                    "location": {
+                                                        "type": "string",
+                                                        "example": "Church Auditorium"
+                                                    },
+                                                    "thumbnail": {
+                                                        "type": "string",
+                                                        "example": "https://sepcam.blob.core.windows.net/...jpg"
+                                                    },
+                                                    "createdAt": {
+                                                        "type": "string",
+                                                        "example": "2026-05-09T00:00:00.000Z"
+                                                    },
+                                                    "updatedAt": {
+                                                        "type": "string",
+                                                        "example": "2026-05-09T00:00:00.000Z"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "uuid"
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Event Title"
+                                                    },
+                                                    "description": {
+                                                        "type": "string",
+                                                        "example": "Event Description"
+                                                    },
+                                                    "date": {
+                                                        "type": "string",
+                                                        "example": "2026-10-10T00:00:00.000Z"
+                                                    },
+                                                    "location": {
+                                                        "type": "string",
+                                                        "example": "Church Auditorium"
+                                                    },
+                                                    "thumbnail": {
+                                                        "type": "string",
+                                                        "example": "https://sepcam.blob.core.windows.net/...jpg"
+                                                    },
+                                                    "createdAt": {
+                                                        "type": "string",
+                                                        "example": "2026-05-09T00:00:00.000Z"
+                                                    },
+                                                    "updatedAt": {
+                                                        "type": "string",
+                                                        "example": "2026-05-09T00:00:00.000Z"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            }
+                        }
                     },
                     "500": {
-                        "description": "Internal Server Error"
+                        "description": "Server Error"
                     }
                 }
             }
         },
-        "/admin/upload": {
-            "post": {
+        "/upcoming-events": {
+            "get": {
+                "tags": [
+                    "Public API"
+                ],
+                "summary": "Fetch upcoming Google Calendar events",
+                "description": "Returns a list of the next 3 upcoming church events directly from Google Calendar API.",
+                "responses": {
+                    "200": {
+                        "description": "List of Google Calendar events",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "example": "event-id"
+                                            },
+                                            "summary": {
+                                                "type": "string",
+                                                "example": "Event Summary / Title"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "Event Description"
+                                            },
+                                            "htmlLink": {
+                                                "type": "string",
+                                                "example": "https://calendar.google.com/..."
+                                            },
+                                            "start": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "dateTime": {
+                                                        "type": "string",
+                                                        "example": "2026-10-10T10:00:00Z"
+                                                    }
+                                                }
+                                            },
+                                            "end": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "dateTime": {
+                                                        "type": "string",
+                                                        "example": "2026-10-10T12:00:00Z"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "id": {
+                                                "type": "string",
+                                                "example": "event-id"
+                                            },
+                                            "summary": {
+                                                "type": "string",
+                                                "example": "Event Summary / Title"
+                                            },
+                                            "description": {
+                                                "type": "string",
+                                                "example": "Event Description"
+                                            },
+                                            "htmlLink": {
+                                                "type": "string",
+                                                "example": "https://calendar.google.com/..."
+                                            },
+                                            "start": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "dateTime": {
+                                                        "type": "string",
+                                                        "example": "2026-10-10T10:00:00Z"
+                                                    }
+                                                }
+                                            },
+                                            "end": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "dateTime": {
+                                                        "type": "string",
+                                                        "example": "2026-10-10T12:00:00Z"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                }
+            }
+        },
+        "/admin/dashboard": {
+            "get": {
+                "tags": [
+                    "Admin Dashboard"
+                ],
+                "summary": "Fetch backwards-compatible dashboard content listing",
                 "description": "",
                 "responses": {
-                    "default": {
-                        "description": ""
+                    "200": {
+                        "description": "Successfully fetched dashboard content",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "entities": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "rowKey": {
+                                                        "type": "string",
+                                                        "example": "uuid"
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Message Title"
+                                                    },
+                                                    "theme": {
+                                                        "type": "string",
+                                                        "example": "Theme"
+                                                    },
+                                                    "date": {
+                                                        "type": "string",
+                                                        "example": "2026-05-09T00:00:00.000Z"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "entities": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "rowKey": {
+                                                        "type": "string",
+                                                        "example": "uuid"
+                                                    },
+                                                    "title": {
+                                                        "type": "string",
+                                                        "example": "Message Title"
+                                                    },
+                                                    "theme": {
+                                                        "type": "string",
+                                                        "example": "Theme"
+                                                    },
+                                                    "date": {
+                                                        "type": "string",
+                                                        "example": "2026-05-09T00:00:00.000Z"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/upload": {
+            "post": {
+                "tags": [
+                    "Admin Messages"
+                ],
+                "summary": "Upload a new Sepcam Message",
+                "description": "",
+                "responses": {
+                    "201": {
+                        "description": "Message created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "example": "uuid"
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "example": "Message Title"
+                                        },
+                                        "messageThumbnail": {
+                                            "type": "string",
+                                            "example": "event-1778321832216.jpg"
+                                        },
+                                        "audioFile": {
+                                            "type": "string",
+                                            "example": "event-1778321832216.mp3"
+                                        },
+                                        "pdfFile": {
+                                            "type": "string",
+                                            "example": "event-1778321832216.pdf"
+                                        },
+                                        "createdAt": {
+                                            "type": "string",
+                                            "example": "2026-05-09T00:00:00.000Z"
+                                        },
+                                        "updatedAt": {
+                                            "type": "string",
+                                            "example": "2026-05-09T00:00:00.000Z"
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "id": {
+                                            "type": "string",
+                                            "example": "uuid"
+                                        },
+                                        "title": {
+                                            "type": "string",
+                                            "example": "Message Title"
+                                        },
+                                        "messageThumbnail": {
+                                            "type": "string",
+                                            "example": "event-1778321832216.jpg"
+                                        },
+                                        "audioFile": {
+                                            "type": "string",
+                                            "example": "event-1778321832216.mp3"
+                                        },
+                                        "pdfFile": {
+                                            "type": "string",
+                                            "example": "event-1778321832216.pdf"
+                                        },
+                                        "createdAt": {
+                                            "type": "string",
+                                            "example": "2026-05-09T00:00:00.000Z"
+                                        },
+                                        "updatedAt": {
+                                            "type": "string",
+                                            "example": "2026-05-09T00:00:00.000Z"
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Title is required for slugification"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "theme": {
+                                        "type": "string"
+                                    },
+                                    "caption": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "serviceTag": {
+                                        "type": "string"
+                                    },
+                                    "youtubeLink": {
+                                        "type": "string"
+                                    },
+                                    "preacher": {
+                                        "type": "string"
+                                    },
+                                    "preacherThumbnail": {
+                                        "type": "string"
+                                    },
+                                    "messageThumbnail": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "audioFile": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "pdfFile": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": [
+                                    "title"
+                                ]
+                            }
+                        }
                     }
                 }
             }
         },
         "/admin/update/{id}": {
             "put": {
+                "tags": [
+                    "Admin Messages"
+                ],
+                "summary": "Update an existing Sepcam Message",
                 "description": "",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Message ID"
+                    }
+                ],
                 "responses": {
-                    "default": {
-                        "description": ""
+                    "200": {
+                        "description": "Updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Updated successfully"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "uuid"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Updated Title"
+                                                },
+                                                "messageThumbnail": {
+                                                    "type": "string",
+                                                    "example": "event-1778321832216.jpg"
+                                                },
+                                                "audioFile": {
+                                                    "type": "string",
+                                                    "example": "event-1778321832216.mp3"
+                                                },
+                                                "pdfFile": {
+                                                    "type": "string",
+                                                    "example": "event-1778321832216.pdf"
+                                                },
+                                                "createdAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                },
+                                                "updatedAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Updated successfully"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "uuid"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Updated Title"
+                                                },
+                                                "messageThumbnail": {
+                                                    "type": "string",
+                                                    "example": "event-1778321832216.jpg"
+                                                },
+                                                "audioFile": {
+                                                    "type": "string",
+                                                    "example": "event-1778321832216.mp3"
+                                                },
+                                                "pdfFile": {
+                                                    "type": "string",
+                                                    "example": "event-1778321832216.pdf"
+                                                },
+                                                "createdAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                },
+                                                "updatedAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Message not found for update"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "theme": {
+                                        "type": "string"
+                                    },
+                                    "caption": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "serviceTag": {
+                                        "type": "string"
+                                    },
+                                    "youtubeLink": {
+                                        "type": "string"
+                                    },
+                                    "preacher": {
+                                        "type": "string"
+                                    },
+                                    "preacherThumbnail": {
+                                        "type": "string"
+                                    },
+                                    "messageThumbnail": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "audioFile": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    },
+                                    "pdfFile": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
         },
         "/admin/delete/{id}": {
             "delete": {
+                "tags": [
+                    "Admin Messages"
+                ],
+                "summary": "Delete an existing Sepcam Message",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Message ID"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content. Successfully deleted"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Message not found for deletion"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/events": {
+            "post": {
+                "tags": [
+                    "Admin Events"
+                ],
+                "summary": "Create a church event",
                 "description": "",
                 "responses": {
-                    "default": {
-                        "description": ""
+                    "201": {
+                        "description": "Event created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Event created successfully"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "uuid"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Event Title"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Event description"
+                                                },
+                                                "date": {
+                                                    "type": "string",
+                                                    "example": "2026-10-10T00:00:00.000Z"
+                                                },
+                                                "location": {
+                                                    "type": "string",
+                                                    "example": "Auditorium"
+                                                },
+                                                "thumbnail": {
+                                                    "type": "string",
+                                                    "example": "event-1778321832216.jpg"
+                                                },
+                                                "createdAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                },
+                                                "updatedAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Event created successfully"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "uuid"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "Event Title"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Event description"
+                                                },
+                                                "date": {
+                                                    "type": "string",
+                                                    "example": "2026-10-10T00:00:00.000Z"
+                                                },
+                                                "location": {
+                                                    "type": "string",
+                                                    "example": "Auditorium"
+                                                },
+                                                "thumbnail": {
+                                                    "type": "string",
+                                                    "example": "event-1778321832216.jpg"
+                                                },
+                                                "createdAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                },
+                                                "updatedAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Title and Date are required"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "location": {
+                                        "type": "string"
+                                    },
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                },
+                                "required": [
+                                    "title",
+                                    "date"
+                                ]
+                            }
+                        }
                     }
                 }
             }
         },
-        "/user/login": {
+        "/admin/events/{id}": {
+            "put": {
+                "tags": [
+                    "Admin Events"
+                ],
+                "summary": "Update a church event",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Event ID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Event updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Event updated successfully"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "uuid"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "New Title"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Event description"
+                                                },
+                                                "date": {
+                                                    "type": "string",
+                                                    "example": "2026-10-10T00:00:00.000Z"
+                                                },
+                                                "location": {
+                                                    "type": "string",
+                                                    "example": "Auditorium"
+                                                },
+                                                "thumbnail": {
+                                                    "type": "string",
+                                                    "example": "event-1778321832216.jpg"
+                                                },
+                                                "createdAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                },
+                                                "updatedAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Event updated successfully"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "uuid"
+                                                },
+                                                "title": {
+                                                    "type": "string",
+                                                    "example": "New Title"
+                                                },
+                                                "description": {
+                                                    "type": "string",
+                                                    "example": "Event description"
+                                                },
+                                                "date": {
+                                                    "type": "string",
+                                                    "example": "2026-10-10T00:00:00.000Z"
+                                                },
+                                                "location": {
+                                                    "type": "string",
+                                                    "example": "Auditorium"
+                                                },
+                                                "thumbnail": {
+                                                    "type": "string",
+                                                    "example": "event-1778321832216.jpg"
+                                                },
+                                                "createdAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                },
+                                                "updatedAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Event not found for update"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "multipart/form-data": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "title": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "date": {
+                                        "type": "string",
+                                        "format": "date-time"
+                                    },
+                                    "location": {
+                                        "type": "string"
+                                    },
+                                    "file": {
+                                        "type": "string",
+                                        "format": "binary"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin Events"
+                ],
+                "summary": "Delete a church event",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "Event ID"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content. Successfully deleted"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "Event not found for deletion"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/users": {
             "post": {
+                "tags": [
+                    "Admin Users"
+                ],
+                "summary": "Create a new administrative user",
                 "description": "",
                 "responses": {
-                    "default": {
-                        "description": ""
+                    "201": {
+                        "description": "User created successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User created successfully"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "uuid"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "admin@sepcam.com"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "ADMIN"
+                                                },
+                                                "createdAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                },
+                                                "updatedAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User created successfully"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "uuid"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "admin@sepcam.com"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "ADMIN"
+                                                },
+                                                "createdAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                },
+                                                "updatedAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Email and password are required"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "409": {
+                        "description": "User with this email already exists"
+                    },
+                    "500": {
+                        "description": "Server Error"
                     }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "admin@sepcam.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "securepassword123"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "ADMIN"
+                                    }
+                                },
+                                "required": [
+                                    "email",
+                                    "password"
+                                ]
+                            }
+                        }
+                    }
+                }
+            },
+            "get": {
+                "tags": [
+                    "Admin Users"
+                ],
+                "summary": "List all administrative users",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "List of users",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "uuid"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "admin@sepcam.com"
+                                                    },
+                                                    "role": {
+                                                        "type": "string",
+                                                        "example": "ADMIN"
+                                                    },
+                                                    "createdAt": {
+                                                        "type": "string",
+                                                        "example": "2026-05-09T00:00:00.000Z"
+                                                    },
+                                                    "updatedAt": {
+                                                        "type": "string",
+                                                        "example": "2026-05-09T00:00:00.000Z"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "data": {
+                                            "type": "array",
+                                            "items": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "string",
+                                                        "example": "uuid"
+                                                    },
+                                                    "email": {
+                                                        "type": "string",
+                                                        "example": "admin@sepcam.com"
+                                                    },
+                                                    "role": {
+                                                        "type": "string",
+                                                        "example": "ADMIN"
+                                                    },
+                                                    "createdAt": {
+                                                        "type": "string",
+                                                        "example": "2026-05-09T00:00:00.000Z"
+                                                    },
+                                                    "updatedAt": {
+                                                        "type": "string",
+                                                        "example": "2026-05-09T00:00:00.000Z"
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/admin/users/{id}": {
+            "put": {
+                "tags": [
+                    "Admin Users"
+                ],
+                "summary": "Update an administrative user",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "User ID"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "User updated successfully",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User updated successfully"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "uuid"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "newadmin@sepcam.com"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "SUPER_ADMIN"
+                                                },
+                                                "createdAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                },
+                                                "updatedAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "message": {
+                                            "type": "string",
+                                            "example": "User updated successfully"
+                                        },
+                                        "data": {
+                                            "type": "object",
+                                            "properties": {
+                                                "id": {
+                                                    "type": "string",
+                                                    "example": "uuid"
+                                                },
+                                                "email": {
+                                                    "type": "string",
+                                                    "example": "newadmin@sepcam.com"
+                                                },
+                                                "role": {
+                                                    "type": "string",
+                                                    "example": "SUPER_ADMIN"
+                                                },
+                                                "createdAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                },
+                                                "updatedAt": {
+                                                    "type": "string",
+                                                    "example": "2026-05-09T00:00:00.000Z"
+                                                }
+                                            }
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "User not found"
+                    },
+                    "409": {
+                        "description": "Email is already in use by another user"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ],
+                "requestBody": {
+                    "required": false,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "newadmin@sepcam.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "newpassword123"
+                                    },
+                                    "role": {
+                                        "type": "string",
+                                        "example": "SUPER_ADMIN"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "Admin Users"
+                ],
+                "summary": "Delete an administrative user",
+                "description": "",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        },
+                        "description": "User ID"
+                    }
+                ],
+                "responses": {
+                    "204": {
+                        "description": "No Content. Successfully deleted"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "404": {
+                        "description": "User not found for deletion"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/user/login": {
+            "post": {
+                "tags": [
+                    "Authentication"
+                ],
+                "summary": "Login to receive a signed JWT token",
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "Successful login",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR..."
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            },
+                            "application/xml": {
+                                "schema": {
+                                    "type": "object",
+                                    "properties": {
+                                        "token": {
+                                            "type": "string",
+                                            "example": "eyJhbGciOiJIUzI1NiIsInR..."
+                                        }
+                                    },
+                                    "xml": {
+                                        "name": "main"
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Email and password are required"
+                    },
+                    "401": {
+                        "description": "Invalid credentials"
+                    },
+                    "500": {
+                        "description": "Server Error"
+                    }
+                },
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string",
+                                        "example": "admin@sepcam.com"
+                                    },
+                                    "password": {
+                                        "type": "string",
+                                        "example": "password123"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": "JWT"
+            }
+        },
+        "schemas": {
+            "ErrorResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Error message description"
+                    },
+                    "error": {
+                        "type": "string",
+                        "example": "Detailed error trace (optional)"
+                    }
+                },
+                "xml": {
+                    "name": "ErrorResponse"
+                }
+            },
+            "SuccessResponse": {
+                "type": "object",
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Action completed successfully"
+                    }
+                },
+                "xml": {
+                    "name": "SuccessResponse"
                 }
             }
         }
