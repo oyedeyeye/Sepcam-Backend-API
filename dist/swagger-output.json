@@ -8,15 +8,11 @@
     "servers": [
         {
             "url": "http://localhost:5000",
-            "description": "Current Environment"
+            "description": "Localhost Server"
         },
         {
-            "url": "https://api.sepcam.com",
+            "url": "https://sepcam.org",
             "description": "Production Server"
-        },
-        {
-            "url": "/",
-            "description": "Relative Path (Auto-resolves to current host)"
         }
     ],
     "tags": [
@@ -230,6 +226,22 @@
                         "schema": {
                             "type": "string"
                         }
+                    },
+                    {
+                        "name": "page",
+                        "description": "Page number (default: 1)",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "description": "Items per page (default: 10)",
+                        "in": "query",
+                        "schema": {
+                            "type": "integer"
+                        }
                     }
                 ],
                 "responses": {
@@ -273,6 +285,23 @@
                                                         "type": "string",
                                                         "example": "2026-05-09T00:00:00.000Z"
                                                     }
+                                                }
+                                            }
+                                        },
+                                        "meta": {
+                                            "type": "object",
+                                            "properties": {
+                                                "total": {
+                                                    "type": "number",
+                                                    "example": 10
+                                                },
+                                                "page": {
+                                                    "type": "number",
+                                                    "example": 1
+                                                },
+                                                "limit": {
+                                                    "type": "number",
+                                                    "example": 10
                                                 }
                                             }
                                         }
@@ -319,6 +348,23 @@
                                                         "type": "string",
                                                         "example": "2026-05-09T00:00:00.000Z"
                                                     }
+                                                }
+                                            }
+                                        },
+                                        "meta": {
+                                            "type": "object",
+                                            "properties": {
+                                                "total": {
+                                                    "type": "number",
+                                                    "example": 10
+                                                },
+                                                "page": {
+                                                    "type": "number",
+                                                    "example": 1
+                                                },
+                                                "limit": {
+                                                    "type": "number",
+                                                    "example": 10
                                                 }
                                             }
                                         }
@@ -2158,6 +2204,48 @@
                                     "password": {
                                         "type": "string",
                                         "example": "password123"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/api/contact/": {
+            "post": {
+                "description": "",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    },
+                    "400": {
+                        "description": "Bad Request"
+                    },
+                    "500": {
+                        "description": "Internal Server Error"
+                    }
+                },
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "example": "any"
+                                    },
+                                    "email": {
+                                        "example": "any"
+                                    },
+                                    "phone": {
+                                        "example": "any"
+                                    },
+                                    "message": {
+                                        "example": "any"
+                                    },
+                                    "bot_check": {
+                                        "example": "any"
                                     }
                                 }
                             }

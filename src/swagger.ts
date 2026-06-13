@@ -11,16 +11,12 @@ const doc = {
   // In OpenAPI 3, 'host' and 'schemes' are replaced by 'servers'.
   servers: [
     {
-      url: process.env.API_BASE_URL || `http://localhost:${process.env.PORT || 5000}`,
-      description: 'Current Environment'
+      url: 'http://localhost:5000',
+      description: 'Localhost Server'
     },
     {
-      url: 'https://api.sepcam.com', // Replace with your actual production domain
+      url: 'https://sepcam.org',
       description: 'Production Server'
-    },
-    {
-      url: '/',
-      description: 'Relative Path (Auto-resolves to current host)'
     }
   ],
   tags: [
