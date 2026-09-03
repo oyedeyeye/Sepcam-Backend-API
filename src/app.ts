@@ -10,7 +10,12 @@ import { globalErrorHandler } from './middlewares/errorHandler';
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: true, // Dynamically mirror the request origin
+  credentials: true, // Allow cookies and authorization headers
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'Accept']
+}));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
 
