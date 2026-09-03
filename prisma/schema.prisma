@@ -42,3 +42,46 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
+
+model BlogArticle {
+  id            String   @id @default(uuid())
+  title         String
+  category      String
+  snippet       String   @db.Text
+  image         String   @db.VarChar(500)
+  date          DateTime @db.Date
+  readTime      String   @db.VarChar(50)
+  authorName    String   @db.VarChar(150)
+  authorRole    String   @db.VarChar(150)
+  authorAvatar  String   @db.VarChar(500)
+  scripture     String?  @db.VarChar(150)
+  scriptureText String?  @db.Text
+  paragraphs    Json     
+  keyTakeaway   String?  @db.Text
+  prayerPoint   String?  @db.Text
+  file          String?  @db.VarChar(500)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+}
+
+model DailyWord {
+  id          String   @id @default(uuid())
+  title       String
+  scripture   String   @db.VarChar(150)
+  passageText String   @db.Text
+  date        DateTime @unique @db.Date
+  author      String   @db.VarChar(150)
+  exhortation Json     
+  prayerPoint String   @db.Text
+  isActive    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model LiveStream {
+  id        String   @id @default(uuid())
+  link      String   @db.VarChar(500)
+  onGoing   Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}

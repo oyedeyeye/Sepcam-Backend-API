@@ -17,6 +17,9 @@ const updateUser_1 = require("../controllers/admin/users/updateUser");
 const deleteUser_1 = require("../controllers/admin/users/deleteUser");
 const auth_1 = require("../middlewares/auth");
 const dashboard_1 = require("../controllers/admin/dashboard");
+const blog_controller_1 = require("../controllers/blog.controller");
+const dailyWord_controller_1 = require("../controllers/dailyWord.controller");
+const liveStream_controller_1 = require("../controllers/liveStream.controller");
 const router = (0, express_1.Router)();
 const upload = (0, multer_1.default)({ dest: '/tmp/uploads/' });
 // Base protection against unauthenticated access
@@ -42,4 +45,14 @@ router.post('/users', createUser_1.createUser);
 router.get('/users', getUsers_1.getUsers);
 router.put('/users/:id', updateUser_1.updateUser);
 router.delete('/users/:id', deleteUser_1.deleteUser);
+// Blog Management Routes
+router.post('/blog', blog_controller_1.createArticle);
+router.put('/blog/:id', blog_controller_1.updateArticle);
+router.delete('/blog/:id', blog_controller_1.deleteArticle);
+// Daily Word Management Routes
+router.post('/daily-word', dailyWord_controller_1.createDevotional);
+router.put('/daily-word/:id', dailyWord_controller_1.updateDevotional);
+router.delete('/daily-word/:id', dailyWord_controller_1.deleteDevotional);
+// Live Stream Management Route
+router.post('/live-stream', liveStream_controller_1.upsertLiveStream);
 exports.default = router;

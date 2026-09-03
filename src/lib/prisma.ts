@@ -10,4 +10,4 @@ if (process.env.NODE_ENV !== 'test') {
   adapter = new PrismaMariaDb(connectionString);
 }
 
-export const prisma = new PrismaClient(adapter ? { adapter } : undefined);
+export const prisma = adapter ? new PrismaClient({ adapter }) : new PrismaClient();

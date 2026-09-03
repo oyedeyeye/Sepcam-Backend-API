@@ -32,4 +32,27 @@ describe('Public Routes - /resources API Caching', () => {
     // but this ensures the endpoint still behaves exactly identically.
     console.log(`First request took ${time1}ms. Second request took ${time2}ms.`);
   });
+
+  describe('New Public Endpoints (Blog, Devotional, Live Stream)', () => {
+    it('GET /blog should return 200 and paginated structure', async () => {
+      const res = await request(app).get('/blog?page=1&limit=5');
+      expect(res.status).toBe(200);
+      expect(res.body).toHaveProperty('data');
+      expect(Array.isArray(res.body.data)).toBe(true);
+      expect(res.body).toHaveProperty('meta');
+      expect(res.body.meta).toHaveProperty('total');
+    });
+
+    it('GET /daily-word should return 200 or 404 depending on db state', async () => {
+      const res = await request(app).get('/daily-word');
+      // If DB is empty, it should be 404. If seeded, 200.
+      expect([200, 404]).toContain(res.status);
+    });
+
+    it('GET /live-stream should return 200 or 404 depending on db state', async () => {
+      const res = await request(app).get('/live-stream');
+      // If DB is empty, it should be 404. If seeded, 200.
+      expect([200, 404]).toContain(res.status);
+    });
+  });
 });

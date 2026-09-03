@@ -13,4 +13,4 @@ if (process.env.NODE_ENV !== 'test') {
     const connectionString = process.env.DATABASE_URL || "mysql://sepcam_user:sepcam_pass@localhost:3306/sepcam_db";
     adapter = new adapter_mariadb_1.PrismaMariaDb(connectionString);
 }
-exports.prisma = new client_1.PrismaClient(adapter ? { adapter } : undefined);
+exports.prisma = adapter ? new client_1.PrismaClient({ adapter }) : new client_1.PrismaClient();

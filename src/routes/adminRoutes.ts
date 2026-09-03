@@ -12,6 +12,9 @@ import { updateUser } from '../controllers/admin/users/updateUser';
 import { deleteUser } from '../controllers/admin/users/deleteUser';
 import { authenticateRequest } from '../middlewares/auth';
 import { getDashboardData } from '../controllers/admin/dashboard';
+import { createArticle, updateArticle, deleteArticle } from '../controllers/blog.controller';
+import { createDevotional, updateDevotional, deleteDevotional } from '../controllers/dailyWord.controller';
+import { upsertLiveStream } from '../controllers/liveStream.controller';
 
 const router = Router();
 const upload = multer({ dest: '/tmp/uploads/' });
@@ -45,5 +48,18 @@ router.post('/users', createUser);
 router.get('/users', getUsers);
 router.put('/users/:id', updateUser);
 router.delete('/users/:id', deleteUser);
+
+// Blog Management Routes
+router.post('/blog', createArticle);
+router.put('/blog/:id', updateArticle);
+router.delete('/blog/:id', deleteArticle);
+
+// Daily Word Management Routes
+router.post('/daily-word', createDevotional);
+router.put('/daily-word/:id', updateDevotional);
+router.delete('/daily-word/:id', deleteDevotional);
+
+// Live Stream Management Route
+router.post('/live-stream', upsertLiveStream);
 
 export default router;

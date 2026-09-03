@@ -88,6 +88,18 @@ When the application is running successfully (e.g., via `npm run dev`), you can 
 | `GET`  | `/admin/users`    | List all Admin Users (excludes passwords)      | Yes |
 | `PUT`  | `/admin/users/:id`| Update Admin User details/password             | Yes |
 | `DELETE`| `/admin/users/:id`| Delete Admin User                              | Yes |
+| `GET`  | `/blog`           | Paginated list of blog articles                | No  |
+| `GET`  | `/blog/search`    | Search blog articles by keyword                | No  |
+| `GET`  | `/blog/:id`       | Full read of a single blog article             | No  |
+| `POST` | `/admin/blog`     | Create a new blog article                      | Yes |
+| `PUT`  | `/admin/blog/:id` | Update an existing blog article                | Yes |
+| `DELETE`| `/admin/blog/:id`| Delete a blog article                          | Yes |
+| `GET`  | `/daily-word`     | Get today's active devotional                  | No  |
+| `POST` | `/admin/daily-word`| Create a new devotional entry                 | Yes |
+| `PUT`  | `/admin/daily-word/:id`| Update a devotional entry                 | Yes |
+| `DELETE`| `/admin/daily-word/:id`| Delete a devotional entry                | Yes |
+| `GET`  | `/live-stream`    | Get current live stream configuration          | No  |
+| `POST` | `/admin/live-stream`| Upsert live stream link and status           | Yes |
 
 *Note: Admin routes are guarded gracefully by the `/middlewares/auth.ts` enforcing strict JWT verification.*
 
